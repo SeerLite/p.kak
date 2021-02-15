@@ -69,4 +69,18 @@ define-command p-update %{
 	}
 }
 
+define-command p-clean %{
+	evaluate-commands %sh{
+		mkdir -p "$kak_opt_p_plugin_dir"
+		cd "$kak_opt_p_plugin_dir"
+		for plugin_source in $kak_opt_p_plugins_all; do
+			plugin_name="${plugin_source##*/}"
+			plugin_name="${plugin_name%.git}"
+			[ -d "$plugin_name" ] && plugins_to_keep_flags="$plugins_to_keep_flags --exclude $plugin_name"
+		done
+
+		fd -uu -d 1 -t d $plugins_to_keep_flags -X rm -rf {}
+	}
+}
+
 hook -group p-kak-load global KakBegin .* p-load
