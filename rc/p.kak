@@ -1,4 +1,4 @@
-declare-option -hidden str-list p_plugins_all
+declare-option -hidden str-list p_plugins_all p.kak
 declare-option -hidden str-list p_plugins_unloaded
 declare-option str p_plugin_dir "%val{config}/plugins"
 declare-option bool p_fail_on_missing true
@@ -84,8 +84,8 @@ define-command p-clean %{
 
 define-command -hidden p-raw-purge %{
 	nop %sh{
-		rm -rf "$kak_opt_p_plugin_dir"
-		mkdir -p "$kak_opt_p_plugin_dir"
+		cd "$kak_opt_p_plugin_dir"
+		fd -uu -d 1 -t d -E p.kak -X rm -rf {}
 	}
 }
 
