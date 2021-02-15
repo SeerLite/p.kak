@@ -37,13 +37,14 @@ define-command p-load %{
 
 		# execute all commands at once
 		if [ -n "$plugins_to_load" ]; then
-			fd -uu -t f '\.kak$' $plugins_to_load 2> /dev/null | sed "s|.*|source \"$kak_opt_p_plugin_dir/&\"|"
+			fd -uu -t f '\.kak$' $plugins_to_load 2> /dev/null | \
+				sed "s|.*|try %{source \"$kak_opt_p_plugin_dir/&\"} catch %{echo -debug \"Failed to load '&'\"}|"
 			printf '%s' "$finish_cmd"
 		fi
 	}
 }
 
-# TODO: p-install, p-update, p-clean
+# TODO: p-install, p-update, p-clean, p-purge, p-reinstall
 define-command p-install %{
 	evaluate-commands %sh{
 		mkdir -p "$kak_opt_p_plugin_dir"
