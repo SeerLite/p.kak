@@ -46,7 +46,7 @@ define-command p-load %{
 
 # TODO: p-install, p-update, p-clean, p-purge, p-reinstall
 define-command p-install %{
-	evaluate-commands %sh{
+	nop %sh{
 		mkdir -p "$kak_opt_p_plugin_dir"
 		cd "$kak_opt_p_plugin_dir"
 		for plugin_source in $kak_opt_p_plugins_all; do
@@ -58,7 +58,7 @@ define-command p-install %{
 }
 
 define-command p-update %{
-	evaluate-commands %sh{
+	nop %sh{
 		mkdir -p "$kak_opt_p_plugin_dir"
 		cd "$kak_opt_p_plugin_dir"
 		for plugin_source in $kak_opt_p_plugins_all; do
@@ -70,7 +70,7 @@ define-command p-update %{
 }
 
 define-command p-clean %{
-	evaluate-commands %sh{
+	nop %sh{
 		mkdir -p "$kak_opt_p_plugin_dir"
 		cd "$kak_opt_p_plugin_dir"
 		for plugin_source in $kak_opt_p_plugins_all; do
@@ -81,6 +81,18 @@ define-command p-clean %{
 
 		fd -uu -d 1 -t d $plugins_to_keep_flags -X rm -rf {}
 	}
+}
+
+define-command p-purge %{
+	nop %sh{
+		rm -rf "$kak_opt_p_plugin_dir"
+		mkdir -p "$kak_opt_p_plugin_dir"
+	}
+}
+
+define-command p-reinstall %{
+	p-purge
+	p-install
 }
 
 hook -group p-kak-load global KakBegin .* p-load
