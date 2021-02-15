@@ -52,7 +52,19 @@ define-command p-install %{
 		for plugin_source in $kak_opt_p_plugins_all; do
 			plugin_name="${plugin_source##*/}"
 			plugin_name="${plugin_name%.git}"
-			git clone "$plugin_source" "$plugin_name"
+			[ ! -d "$plugin_name" ] && git clone "$plugin_source" "$plugin_name" >&2
+		done
+	}
+}
+
+define-command p-update %{
+	evaluate-commands %sh{
+		mkdir -p "$kak_opt_p_plugin_dir"
+		cd "$kak_opt_p_plugin_dir"
+		for plugin_source in $kak_opt_p_plugins_all; do
+			plugin_name="${plugin_source##*/}"
+			plugin_name="${plugin_name%.git}"
+			[ -d "$plugin_name" ] && git -C "$plugin_name" pull >&2
 		done
 	}
 }
