@@ -28,7 +28,7 @@ define-command p-load %{
 				finish_cmd="$finish_cmd; trigger-user-hook p_plugin_loaded=$plugin_source"
 			else
 				if [ "$kak_opt_p_fail_on_missing" = "true" ]; then
-					printf "fail \"'%s' not found in '%s'. Install it with p_install first.\"\n" \
+					printf "fail \"'%s' not found in '%s'. Install it with p-install first.\"\n" \
 						"$plugin_name" "$kak_opt_p_plugin_dir"
 					exit
 				fi
@@ -43,7 +43,7 @@ define-command p-load %{
 	}
 }
 
-# TODO: p_install, p_update, p_clean
+# TODO: p-install, p-update, p-clean
 define-command p-install %{
 	evaluate-commands %sh{
 		mkdir -p "$kak_opt_p_plugin_dir"
