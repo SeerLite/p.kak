@@ -6,11 +6,11 @@ declare-option bool p_fail_on_missing true
 define-command p-plugin -params 1..2 %{
 	set-option -add global p_plugins_all %arg{1}
 	set-option -add global p_plugins_unloaded %arg{1}
-	hook global -group p-kak User "p_plugin_loaded=%arg{1}" %arg{2}
+	hook global -group p-kak-config User "p_plugin_loaded=%arg{1}" %arg{2}
 }
 
 define-command p-plugin-mod -params 2..3 %{
-	hook global -group p-kak User "p_plugin_loaded=%arg{2}" "require-module %arg{1}"
+	hook global -group p-kak-config User "p_plugin_loaded=%arg{2}" "require-module %arg{1}"
 	p-plugin %arg{2} %arg{3}
 }
 
@@ -57,4 +57,4 @@ define-command p-install %{
 	}
 }
 
-hook -group p-kak global KakBegin .* p-load
+hook -group p-kak-load global KakBegin .* p-load
