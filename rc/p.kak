@@ -55,3 +55,5 @@ define-command p-install %{
 		done
 	}
 }
+
+hook -group p-kak global KakBegin .* p-load
