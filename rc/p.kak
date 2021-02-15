@@ -44,7 +44,6 @@ define-command p-load %{
 	}
 }
 
-# TODO: p-install, p-update, p-clean, p-purge, p-reinstall
 define-command p-install %{
 	nop %sh{
 		mkdir -p "$kak_opt_p_plugin_dir"
@@ -83,15 +82,21 @@ define-command p-clean %{
 	}
 }
 
-define-command p-purge %{
+define-command -hidden p-raw-purge %{
 	nop %sh{
 		rm -rf "$kak_opt_p_plugin_dir"
 		mkdir -p "$kak_opt_p_plugin_dir"
 	}
 }
 
+define-command p-purge %{
+	hook -group p-kak-purge global KakEnd .* %{
+		p-raw-purge
+	}
+}
+
 define-command p-reinstall %{
-	p-purge
+	p-raw-purge
 	p-install
 }
 
