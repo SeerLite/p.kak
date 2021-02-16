@@ -26,7 +26,7 @@ define-command p-load %{
 				finish_cmd="$finish_cmd; set-option -remove global p_plugins_unloaded $plugin_source"
 				finish_cmd="$finish_cmd; trigger-user-hook p-plugin-loaded=$plugin_source"
 			else
-				finish_cmd="$finish_cmd; hook global KakBegin .* %{fail \"'$plugin_name' not found in '$kak_opt_p_plugin_dir'. Install it with p-install first.\"}"
+				finish_cmd="$finish_cmd; echo -debug %{'$plugin_name' not found in '$kak_opt_p_plugin_dir'. Install it with p-install first.}"
 			fi
 		done
 
