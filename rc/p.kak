@@ -1,16 +1,15 @@
 declare-option -hidden str-list p_plugins_all p.kak
 declare-option -hidden str-list p_plugins_unloaded
 declare-option str p_plugin_dir "%val{config}/plugins"
-declare-option bool p_fail_on_missing true
 
 define-command p-plugin -params 1..2 %{
 	set-option -add global p_plugins_all %arg{1}
 	set-option -add global p_plugins_unloaded %arg{1}
-	hook global -group p-kak-config User "p_plugin_loaded=%arg{1}" %arg{2}
+	hook global -group p-kak-config User "p-plugin-loaded=%arg{1}" %arg{2}
 }
 
 define-command p-plugin-mod -params 2..3 %{
-	hook global -group p-kak-config User "p_plugin_loaded=%arg{2}" "require-module %arg{1}"
+	hook global -group p-kak-config User "p-plugin-loaded=%arg{2}" "require-module %arg{1}"
 	p-plugin %arg{2} %arg{3}
 }
 
@@ -25,13 +24,11 @@ define-command p-load %{
 			if [ -d "$plugin_name" ]; then
 				plugins_to_load="$plugins_to_load $plugin_name"
 				finish_cmd="$finish_cmd; set-option -remove global p_plugins_unloaded $plugin_source"
-				finish_cmd="$finish_cmd; trigger-user-hook p_plugin_loaded=$plugin_source"
+				finish_cmd="$finish_cmd; trigger-user-hook p-plugin-loaded=$plugin_source"
 			else
-				if [ "$kak_opt_p_fail_on_missing" = "true" ]; then
-					printf "fail \"'%s' not found in '%s'. Install it with p-install first.\"\n" \
-						"$plugin_name" "$kak_opt_p_plugin_dir"
-					exit
-				fi
+				printf "fail \"'%s' not found in '%s'. Install it with p-install first.\"\n" \
+					"$plugin_name" "$kak_opt_p_plugin_dir"
+				exit
 			fi
 		done
 
@@ -101,3 +98,4 @@ define-command p-reinstall %{
 }
 
 hook -group p-kak-load global KakBegin .* p-load
+trigger-user-hook p-kak-loaded
